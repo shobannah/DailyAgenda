@@ -1,34 +1,62 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
+
+
 var timeDisplayEl = $('#time-display');
+
+var  now = dayjs().format('H')
+console.log(now)
+
 
 // handle displaying the time
 function displayTime() {
   var rightNow = dayjs().format('MMM DD, YYYY [at] hh:mm:ss a');
+
   timeDisplayEl.text(rightNow);
 }
 displayTime();
 setInterval(displayTime, 1000);
 
-$(".saveBtn").click (function() {
 
-  var text = $("description").value;
+// setting data to local storage
+
+$(".saveBtn").on('click', function() {
+
+  localStorage.setItem($(this).parent().attr('id'), $(this).siblings(".description").val())
 
 })
 
 
+for(let i=9; i<13; i++){
+
+  $('#hour-'+i.toString()).children('.description').val(localStorage.getItem('hour-'+i.toString()))
+
+}
+
+for(let i=1; i<6; i++){
+
+  $('#hour-'+i.toString()).children('.description').val(localStorage.getItem('hour-'+i.toString()))
+
+}
 
 
+//Applying the past, present, or future classes
 
+$(".time-block").each(
 
+  function(){
+    if(parseInt( $(this).attr('id').split('-')[1]) < now) {
+    $(this).addClass('past')
 
+  }else if (parseInt( $(this).attr('id').split('-')[1]) > now) {
+    $(this).addClass('future')
 
+  }else {
+    $(this).addClass('present')
+  }
 
-
-
-
-
+})
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
